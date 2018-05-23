@@ -12,17 +12,19 @@ public class FoodTruckInfoOperation implements IFoodTruckInfoOperation {
 
     @Override
     public List<FoodTruckInfo> getFoodTruckByCurrentDate() {
+        //Get current day of week and hour of day
         Date date = new java.util.Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
-
+        //Fast retrieve the list of restaurants back based on above
         return foodTruckMapByDayAndHour.get(DayOfWeek.of(dayOfWeek)).get(hourOfDay);
     }
 
     @Override
-    public void saveData(List<String> list) {
+    public void processData(List<String> list) {
+        //Save all food truck info into foodTruckMapByDayAndHour
         for(String line : list) {
             FoodTruckInfo foodTruckInfo = new FoodTruckInfo(line);
             for(DayOfWeek dow : foodTruckInfo.getOpenDaysAndHours().keySet()) {
@@ -33,7 +35,6 @@ public class FoodTruckInfoOperation implements IFoodTruckInfoOperation {
                 }
             }
         }
-
         for(DayOfWeek dow : DayOfWeek.values()) {
             if(foodTruckMapByDayAndHour.containsKey(dow)) {
                 Map<Integer, List<FoodTruckInfo>> map = foodTruckMapByDayAndHour.get(dow);

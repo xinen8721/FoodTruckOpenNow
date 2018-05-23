@@ -17,12 +17,21 @@ public class Main {
     private static FoodTruckInfoOperation foodTruckInfoOperation = null;
     private static List<List<FoodTruckInfo>> PAGES = new ArrayList<>();
     private static int PAGE_INDEX = 0;
-    private static boolean ONGOING = false;
+    private static boolean DISPLAY_STATE = false;
 
     public static void main(String[] args) {
-        //Initializing the FoodTruckInfo data
         startSession();
-        
+        play();
+        endSession();
+    }
+    public static void startSession() {
+        //Initializing the FoodTruckInfo data
+        buildCommandLibrary();
+        buildFoodTruckInfo();
+    }
+
+    public static void play() {
+        //Interacting Mode with user
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n\nWelcome to FoodTruckOpenNow Service in San Francisco!\n\n");
         Scanner userInput = new Scanner(System.in);
@@ -48,15 +57,9 @@ public class Main {
                 }
             }
         }
-        endSession();
-    }
-    public static void startSession() {
-        buildCommandLibrary();
-        buildFoodTruckInfo();
-    }
-
+    };
     public static void retrieveOpenFoodTrucks() {
-        ONGOING = true;
+        DISPLAY_STATE = true;
         try {
             List<FoodTruckInfo> list = foodTruckInfoOperation.getFoodTruckByCurrentDate();
             System.out.println("There are " + (list == null ? 0 : list.size()) + " foodtrucks open now");
@@ -82,7 +85,7 @@ public class Main {
         if(PAGE_INDEX == PAGES.size()) {
             System.out.println("\n\nWARNING. No more results, please enter \"show-open-foodtrucks\" to start again\n\n");
             PAGE_INDEX = 0;
-            ONGOING = false;
+            DISPLAY_STATE = false;
             return;
         }
         int index = 1;
@@ -94,7 +97,7 @@ public class Main {
     }
 
     public static void showOpenFoodTruckNow() {
-        if(!ONGOING){
+        if(!DISPLAY_STATE){
             retrieveOpenFoodTrucks();
         }
         dispaySinglePage(PAGE_INDEX++);
@@ -118,7 +121,7 @@ public class Main {
     }
 
     public static boolean isValidStatus() {
-        if(!ONGOING) {
+        if(!DISPLAY_STATE) {
             System.out.println("please enter \"show-open-foodtrucks\" to start");
             return false;
         }
@@ -142,7 +145,7 @@ public class Main {
             foodTruckInfoOperation = new FoodTruckInfoOperation();
         }
 
-        foodTruckInfoOperation.saveData(csvLines);
+        foodTruckInfoOperation.processData(csvLines);
     }
     public static void showCommands() {
         if(commandLibrary.isEmpty()) {

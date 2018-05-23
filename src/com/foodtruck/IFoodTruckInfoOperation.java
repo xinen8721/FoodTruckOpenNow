@@ -5,5 +5,5 @@ import java.util.List;
 
 interface IFoodTruckInfoOperation {
     public List<FoodTruckInfo> getFoodTruckByCurrentDate();
-    public void saveData(List<String> list);
+    public void processData(List<String> list);
 }
