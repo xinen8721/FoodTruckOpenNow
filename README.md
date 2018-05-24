@@ -19,6 +19,7 @@ https://www.jetbrains.com/idea/download/#section=mac
 3. Command "next-page" to display next page of 10 results of all opened foodtrucks if there are any.
 4. Command "prev-page" to display previous page of 10 results of all opened foodtrucks if there are any.
 5. Command "end" will exit out the program.
+6. In the program, once session started, there would be a map called openFoodTruckByDayAndHour constructed and maintained, by inputing the day of week and hour of the day, the map will return the pre-processed list of data back in constant time.
 
 # Test the program
 1. By default, it is using currrent day of week and hour of the day to determine the list of foodtrucks that are open now. To test more time stamp, you can simply go to https://github.com/xinen8721/FoodTruckOpenNow/blob/master/src/com/foodtruck/FoodTruckInfoOperation.java#L19-L22 to select arbitrarily any day(From 1 to 7, which will translate to Monday to Sunday) and hour (from 0 to 23 since I use the 24 hour format). 
@@ -34,5 +35,5 @@ https://www.jetbrains.com/idea/download/#section=mac
 
 2. Second difference that I can think of is abusing, for example, to prevent DOS attack or any other possible malicious behavior, in Webapp, we need to set up a throttling mechanism to prevent such things happen, the actual implementation could be using an API Rate limiter, if the request from same ip address hit the server 100 time within 1 seconds, then throttle the request.
 
-3. Trade-off that I made, like I mentioned before, if FoodTruckOpenNow is a Webapp, then it should be READ-Heavy, so reducing the latency for every read request is really important, we can make this happen by costing more storage space, it is a lot faster compared to using less space but longer latency for each read operation since we have to process all the date at runtime. From the command-based FoodTruckOpenNow, we cannot really tell the performance difference between READ and WRITE.
+3. Trade-off that I made, like I mentioned before, if FoodTruckOpenNow is a Webapp, then it should be READ-Heavy, so reducing the latency for every read request is really important, we can make this happen by costing more storage space, it is a lot faster compared to using less space but longer latency for each read operation since the latter one has to process all the data at runtime. However, from the command-based FoodTruckOpenNow, I cannot really tell which trade-off wins over the other.
 
